@@ -43,13 +43,15 @@ myproject2/
 │           │   ├── auth/
 │           │   │   └── login.feature        # Autenticación y obtención de token
 │           │   ├── users/
-│           │   │   ├── create-user.feature  # Crear usuario
-│           │   │   ├── get-user.feature     # Consultar usuario
-│           │   │   ├── upgrade-user.feature # Actualizar usuario
-│           │   │   ├── delete-user.feature  # Eliminar usuario
-│           │   │   └── get-user-not-found.feature # Validar 404
+│           │   │   ├── create-user.feature      # Crear usuario individual
+│           │   │   ├── get-user.feature         # Consultar usuario
+│           │   │   ├── upgrade-user.feature     # Actualizar usuario
+│           │   │   ├── delete-user.feature      # Eliminar usuario
+│           │   │   ├── get-user-not-found.feature # Validar 404
+│           │   │   └── multi-users/
+│           │   │       └── create-mult-user.feature # Crear múltiples usuarios (data-driven)
 │           │   └── flows/
-│           │       └── user-flow.feature    # Flujo completo de integración
+│           │       └── user-flow.feature        # Flujo completo de integración
 │           ├── karate-config.js             # Configuración global (baseUrl, token, env)
 │           └── logback-test.xml             # Configuración de logs
 ├── pom.xml                                  # Dependencias y configuración Maven
@@ -73,7 +75,19 @@ myproject2/
 | delete-user.feature | DELETE | /users/{id} | 204 | Elimina un usuario |
 | get-user-not-found.feature | GET | /users/{id} | 404 | Valida que usuario eliminado no existe |
 
-### 3. Flujo de Integración (`features/flows/user-flow.feature`)
+### 3. Pruebas Data-Driven (`features/users/multi-users/`)
+
+| Feature | Método | Endpoint | Status Code | Descripción |
+|---------|--------|----------|-------------|-------------|
+| create-mult-user.feature | POST | /users | 201 | Crea múltiples usuarios usando Examples (data-driven testing) con generación de emails únicos mediante UUID |
+
+**Características del test data-driven:**
+- Utiliza `Scenario Outline` con `Examples` para ejecutar el mismo test con diferentes datos
+- Genera emails únicos automáticamente usando `java.util.UUID.randomUUID()`
+- Permite validar la creación de usuarios con diferentes combinaciones de nombre y género
+- Implementa función personalizada para formatear emails: `nombre.apellido.uuid@example.com`
+
+### 4. Flujo de Integración (`features/flows/user-flow.feature`)
 - **Propósito**: Ejecutar un flujo completo de principio a fin
 - **Pasos**:
   1. Crear usuario nuevo
